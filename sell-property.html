@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Property - Premium Real Estate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #D4AF37, #FFD700, #D4AF37);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 30px;
+            color: #D4AF37;
+        }
+        
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            color: #D4AF37;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #D4AF37;
+        }
+        
+        main {
+            flex: 1;
+            padding: 50px 0;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+        }
+        
+        .sell-property-section {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: #D4AF37;
+            margin-bottom: 10px;
+        }
+        
+        .section-title p {
+            font-size: 18px;
+            color: #ccc;
+        }
+        
+        .property-form {
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #D4AF37;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+        
+        .form-group select option {
+            background: #121212;
+            color: #fff;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            color: #121212;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(26, 26, 26, 0.9);
+            border-left: 4px solid #D4AF37;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-left-color: #4CAF50;
+        }
+        
+        .notification.error {
+            border-left-color: #F44336;
+        }
+        
+        .notification i {
+            margin-right: 10px;
+            color: #D4AF37;
+        }
+        
+        footer {
+            background: #0a0a0a;
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+        
+        .footer-section h3 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .footer-section p,
+        .footer-section ul {
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: #D4AF37;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            color: #D4AF37;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: #D4AF37;
+            color: #121212;
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            color: #888;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .sell-property-section {
+                padding: 20px;
+            }
+            
+            .section-title h2 {
+                font-size: 28px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+         /* Header Styles */
+         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+            box-shadow: 0 5px 25px rgba(212, 175, 55, 0.2);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo i {
+            margin-right: 12px;
+            color: var(--gold-primary);
+            font-size: 30px;
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .logo:hover {
+            color: var(--gold-light);
+            transform: scale(1.05);
+        }
+
+        /* Menu Styles */
+        .menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .menu li {
+            position: relative;
+            margin: 0 18px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            padding: 8px 0;
+            transition: var(--transition);
+            position: relative;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+            transition: var(--transition);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .menu a:hover::after,
+        .menu a.active::after {
+            width: 100%;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: var(--gold-primary);
+        }
+
+        /* Right Section Styles */
+        .right-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            margin-right: 25px;
+        }
+
+        .auth-buttons a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            margin: 0 12px;
+            transition: var(--transition);
+            font-size: 15px;
+        }
+
+        .auth-buttons a:hover {
+            color: var(--gold-primary);
+        }
+
+        .post-property-btn {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: var(--primary-black);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-property-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .post-property-btn:hover::before {
+            left: 100%;
+        }
+
+        .post-property-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--gold-primary);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 12px 0;
+            z-index: 1;
+            margin-top: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--gold-primary);
+            padding-left: 25px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-crown"></i>
+                Yours Real Estate and Builder'
+            </a>
+            
+            <ul class="menu" id="mainMenu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li class="dropdown">
+                    <a href="properties.html">Properties <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#">All Properties</a>
+                        <a href="#">Featured</a>
+                        <a href="#">New Listings</a>
+                        <a href="#">For Sale</a>
+                        <a href="#">For Rent</a>
+                    </div>
+                </li>
+                <li><a href="services.html">Construction</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            
+            <div class="right-section">
+                <div class="auth-buttons">
+                    <a href="hh.html">Login</a>
+                    <a href="hh.html">Signup</a>
+                </div>
+                <a href="post.html"> <button class="post-property-btn">Post Property</button></a> 
+            </div>
+            
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="sell-property-section">
+                <div class="section-title">
+                    <h2>Sell Your Property</h2>
+                    <p>(Client apna ghar sell karwane ke liye)</p>
+                </div>
+                
+                <form class="property-form" id="sellPropertyForm">
+                    <div class="form-group">
+                        <label for="ownerName">Owner Name</label>
+                        <input type="text" id="ownerName" name="ownerName" required placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="propertyType">Property Type</label>
+                        <select id="propertyType" name="propertyType" required>
+                            <option value="" disabled selected>Select property type</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                            <option value="villa">Villa</option>
+                            <option value="commercial">Commercial</option>
+                            <option value="land">Land</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" required placeholder="Enter property location">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expectedPrice">Expected Price</label>
+                        <input type="text" id="expectedPrice" name="expectedPrice" required placeholder="Enter expected price">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Request</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage">Your request has been submitted successfully!</span>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Premium Estate</h3>
+                    <p>We are a leading real estate agency specializing in premium properties. With years of experience, we help clients buy, sell, and rent properties with ease.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="properties.html">Properties</a></li>
+                        <li><a href="sell-property.html">Sell Property</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                    <p><i class="fas fa-envelope"></i> info@premiumestate.com</p>
+                    
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Premium Estate. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('sellPropertyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const ownerName = document.getElementById('ownerName').value;
+            const phone = document.getElementById('phone').value;
+            const propertyType = document.getElementById('propertyType').value;
+            const location = document.getElementById('location').value;
+            const expectedPrice = document.getElementById('expectedPrice').value;
+            
+            // Simple validation
+            if (!ownerName || !phone || !propertyType || !location || !expectedPrice) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Phone number validation
+            const phoneRegex = /^[0-9]{10,15}$/;
+            if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+                showNotification('Please enter a valid phone number', 'error');
+                return;
+            }
+            
+            // Simulate form submission
+            setTimeout(() => {
+                // Reset form
+                document.getElementById('sellPropertyForm').reset();
+                
+                // Show success notification
+                showNotification('Your property selling request has been submitted successfully! Our team will contact you soon.', 'success');
+            }, 500);
+        });
+        
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const icon = notification.querySelector('i');
+            
+            // Set message
+            notificationMessage.textContent = message;
+            
+            // Set type
+            notification.className = 'notification';
+            if (type === 'success') {
+                notification.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                notification.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+            }
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

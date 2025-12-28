@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investor Dashboard - Premium Estate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --gold-primary: #d4af37;
+            --gold-light: #f4e5c2;
+            --gold-dark: #b8941f;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #050505;
+            color: var(--text-light);
+            padding-top: 80px;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+            box-shadow: 0 5px 25px rgba(212, 175, 55, 0.2);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo i {
+            margin-right: 12px;
+            color: var(--gold-primary);
+            font-size: 30px;
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .logo:hover {
+            color: var(--gold-light);
+            transform: scale(1.05);
+        }
+
+        /* Menu Styles */
+        .menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .menu li {
+            position: relative;
+            margin: 0 18px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            padding: 8px 0;
+            transition: var(--transition);
+            position: relative;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+            transition: var(--transition);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .menu a:hover::after,
+        .menu a.active::after {
+            width: 100%;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: var(--gold-primary);
+        }
+
+        /* Right Section Styles */
+        .right-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-menu {
+            position: relative;
+            margin-right: 25px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-black);
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .user-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .user-dropdown a:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold-primary);
+            padding-left: 25px;
+        }
+
+        .user-dropdown a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .invest-btn {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: var(--primary-black);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invest-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .invest-btn:hover::before {
+            left: 100%;
+        }
+
+        .invest-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--gold-primary);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.6)), url('https://picsum.photos/seed/investor/1920/800.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--gold-primary);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+            letter-spacing: 1px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--text-light);
+            animation: fadeInUp 1s ease 0.2s both;
+            line-height: 1.6;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .tab-nav-item {
+            padding: 15px 25px;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .tab-nav-item.active {
+            color: var(--gold-primary);
+        }
+
+        .tab-nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold-primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .tab-nav-item.active::after {
+            transform: scaleX(1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .welcome-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .welcome-card h2 {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 15px;
+        }
+
+        .welcome-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .welcome-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .quick-actions h3 {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: var(--primary-black);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .action-btn i {
+            margin-right: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Investment Opportunities */
+        .investment-opportunities {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+            margin-bottom: 40px;
+        }
+
+        .investment-opportunities h3 {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all-btn {
+            color: var(--gold-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .view-all-btn:hover {
+            color: var(--gold-light);
+            text-decoration: underline;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .project-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-ongoing {
+            background-color: rgba(76, 175, 80, 0.8);
+            color: white;
+        }
+
+        .status-upcoming {
+            background-color: rgba(33, 150, 243, 0.8);
+            color: white;
+        }
+
+        .status-completed {
+            background-color: rgba(156, 39, 176, 0.8);
+            color: white;
+        }
+
+        .project-info {
+            padding: 20px;
+        }
+
+        .project-info h4 {
+            font-size: 1.2rem;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .project-info p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .project-info .roi {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .project-info .location {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .project-info .location i {
+            margin-right: 8px;
+            color: var(--gold-primary);
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .project-stat {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+        }
+
+        .project-stat i {
+            margin-right: 5px;
+            color: var(--gold-primary);
+        }
+
+        .project-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .project-actions .action-btn {
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .project-actions .action-btn:hover {
+            background: var(--gold-primary);
+            color: var(--primary-black);
+        }
+
+        /* Investment Portfolio */
+        .investment-portfolio {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+            margin-bottom: 40px;
+        }
+
+        .investment-portfolio h3 {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        .portfolio-chart {
+            height: 300px;
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .portfolio-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--gold-primary);
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            color: var(--text-muted);
+        }
+
+        /* Property Detail */
+        .property-detail {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .property-gallery {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .main-image {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 20px;
+        }
+
+        .image-nav:hover {
+            background: rgba(212, 175, 55, 0.8);
+        }
+
+        .image-nav.prev {
+            left: 10px;
+        }
+
+        .image-nav.next {
+            right: 10px;
+        }
+
+        .thumbnail-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            padding: 5px;
+        }
+
+        .thumbnail {
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .thumbnail.active {
+            border-color: var(--gold-primary);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .thumbnail:hover img {
+            transform: scale(1.1);
+        }
+
+        .property-info-detail {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .property-title {
+            font-size: 2rem;
+            color: var(--gold-primary);
+            margin-bottom: 15px;
+        }
+
+        .property-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        .property-location-detail {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .property-location-detail i {
+            margin-right: 10px;
+            color: var(--gold-primary);
+        }
+
+        .property-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        .feature-item i {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            margin-right: 15px;
+        }
+
+        .feature-details {
+            flex: 1;
+        }
+
+        .feature-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .feature-value {
+            font-weight: 500;
+        }
+
+        .property-description {
+            margin-bottom: 30px;
+        }
+
+        .property-description h3 {
+            color: var(--gold-primary);
+            margin-bottom: 15px;
+        }
+
+        .property-description p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .investment-details {
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .investment-details h3 {
+            color: var(--gold-primary);
+            margin-bottom: 15px;
+        }
+
+        .investment-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold-primary);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .contact-form h3 {
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: var(--primary-black);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Login/Register Form */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .auth-form {
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h2 {
+            font-size: 2rem;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px 0;
+            text-align: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .auth-tab.active {
+            color: var(--gold-primary);
+        }
+
+        .auth-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold-primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .auth-tab.active::after {
+            transform: scaleX(1);
+        }
+
+        .auth-content {
+            display: none;
+        }
+
+        .auth-content.active {
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-auth {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-auth-primary {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            color: var(--primary-black);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-auth-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .forgot-password a:hover {
+            color: var(--gold-light);
+            text-decoration: underline;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, var(--secondary-black), var(--primary-black));
+            border-left: 4px solid var(--gold-primary);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left-color: #4CAF50;
+        }
+
+        .notification.error {
+            border-left-color: #F44336;
+        }
+
+        .notification i {
+            margin-right: 10px;
+            color: var(--gold-primary);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-black), var(--secondary-black));
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--gold-primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            color: var(--text-muted);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .navbar {
+                padding: 15px 3%;
+            }
+            
+            .menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: linear-gradient(135deg, var(--primary-black), var(--secondary-black));
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                transition: var(--transition);
+            }
+
+            .menu.active {
+                left: 0;
+            }
+
+            .menu li {
+                margin: 20px 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .right-section {
+                flex-direction: column;
+                margin-top: 20px;
+            }
+
+            .user-menu {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .dashboard-content,
+            .property-detail {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 250px;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .welcome-card {
+                padding: 20px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .investment-opportunities,
+            .investment-portfolio,
+            .contact-form,
+            .auth-form {
+                padding: 20px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .investment-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .thumbnail-gallery {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .main-image {
+                height: 250px;
+            }
+
+            .property-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <i class="fas fa-building"></i>
+                Yours Real Estate and Builder'
+            </a>
+            
+            <ul class="menu" id="mainMenu">
+                <li><a href="#" class="menu-link active" data-tab="home">Home</a></li>
+                <li><a href="#" class="menu-link" data-tab="projects">Projects</a></li>
+                <li><a href="#" class="menu-link" data-tab="property-detail">Property Detail</a></li>
+                <li><a href="#" class="menu-link" data-tab="get-quote">Get Quote</a></li>
+                <li><a href="#" class="menu-link" data-tab="login">Login</a></li>
+                <li><a href="#" class="menu-link" data-tab="dashboard">Dashboard</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            
+            <div class="right-section">
+                <div class="user-menu">
+                    <div class="user-avatar" id="userAvatar">IN</div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> My Dashboard</a>
+                        <a href="#" data-tab="projects"><i class="fas fa-project-diagram"></i> Investment Projects</a>
+                        <a href="#" data-tab="get-quote"><i class="fas fa-file-invoice-dollar"></i> Get Quote</a>
+                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+                <button class="invest-btn" onclick="showTab('projects')">Invest Now</button>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 id="heroTitle">Investment Opportunities</h1>
+            <p id="heroDescription">Discover profitable real estate investment opportunities with high ROI potential</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <div class="tab-nav-item active" data-tab="home">Home</div>
+                <div class="tab-nav-item" data-tab="projects">Projects</div>
+                <div class="tab-nav-item" data-tab="property-detail">Property Detail</div>
+                <div class="tab-nav-item" data-tab="get-quote">Get Quote</div>
+                <div class="tab-nav-item" data-tab="login">Login/Register</div>
+                <div class="tab-nav-item" data-tab="dashboard">Dashboard</div>
+            </div>
+
+            <!-- Home Tab -->
+            <div class="tab-content active" id="home">
+                <div class="investment-opportunities">
+                    <h3>Featured Investment Opportunities</h3>
+                    <div class="view-all-btn" data-tab="projects">View All</div>
+                    
+                    <div class="projects-grid">
+                        <div class="project-card" data-project-id="1">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project1/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Luxury Residences DHA</h4>
+                                <p>High-end residential apartments in prime location with modern amenities</p>
+                                <div class="roi">ROI: 18%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    DHA, Lahore
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q4 2023</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>High Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="1">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="1">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="2">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project2/400/200.jpg" alt="Project">
+                                <div class="project-status status-upcoming">Upcoming</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Commercial Plaza Bahria</h4>
+                                <p>Premium commercial spaces in developing business district</p>
+                                <div class="roi">ROI: 22%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Bahria Town, Islamabad
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Start: Q1 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Very High Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="2">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="2">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="3">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project3/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Beachfront Villas</h4>
+                                <p>Luxury beachfront villas with private beach access and stunning views</p>
+                                <div class="roi">ROI: 25%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Sea View, Karachi
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q2 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Exceptional Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="3">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="3">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="investment-portfolio">
+                    <h3>Investment Performance</h3>
+                    <div class="portfolio-chart">
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                            <p>Investment Growth Chart</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-summary">
+                        <div class="summary-item">
+                            <div class="summary-value">$125,000</div>
+                            <div class="summary-label">Total Investment</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">18.5%</div>
+                            <div class="summary-label">Average ROI</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">5</div>
+                            <div class="summary-label">Active Projects</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">$23,125</div>
+                            <div class="summary-label">Total Returns</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Tab -->
+            <div class="tab-content" id="projects">
+                <div class="investment-opportunities">
+                    <h3>Investment Opportunities</h3>
+                    <div class="filter-tabs">
+                        <div class="filter-tab active">All</div>
+                        <div class="filter-tab">Ongoing</div>
+                        <div class="filter-tab">Upcoming</div>
+                        <div class="filter-tab">Completed</div>
+                    </div>
+                    
+                    <div class="projects-grid">
+                        <div class="project-card" data-project-id="1">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project1/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Luxury Residences DHA</h4>
+                                <p>High-end residential apartments in prime location with modern amenities</p>
+                                <div class="roi">ROI: 18%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    DHA, Lahore
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q4 2023</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>High Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="1">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="1">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="2">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project2/400/200.jpg" alt="Project">
+                                <div class="project-status status-upcoming">Upcoming</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Commercial Plaza Bahria</h4>
+                                <p>Premium commercial spaces in developing business district</p>
+                                <div class="roi">ROI: 22%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Bahria Town, Islamabad
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Start: Q1 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Very High Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="2">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="2">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="3">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project3/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Beachfront Villas</h4>
+                                <p>Luxury beachfront villas with private beach access and stunning views</p>
+                                <div class="roi">ROI: 25%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Sea View, Karachi
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q2 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Exceptional Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="3">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="3">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="4">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project4/400/200.jpg" alt="Project">
+                                <div class="project-status status-completed">Completed</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Green Valley Housing</h4>
+                                <p>Eco-friendly residential community with sustainable living features</p>
+                                <div class="roi">ROI: 15%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Murree, Punjab
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completed: Q2 2023</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Stable Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="4">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="4">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="5">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project5/400/200.jpg" alt="Project">
+                                <div class="project-status status-upcoming">Upcoming</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Tech Hub Complex</h4>
+                                <p>Modern office spaces designed for tech companies and startups</p>
+                                <div class="roi">ROI: 20%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Gulberg, Lahore
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Start: Q3 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>High Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="5">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="5">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="6">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project6/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Riverside Apartments</h4>
+                                <p>Premium apartments with river views and modern amenities</p>
+                                <div class="roi">ROI: 16%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    River View, Islamabad
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q1 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Good Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="6">View Details</a>
+                                    <a href="#" class="action-btn" data-tab="get-quote" data-project-id="6">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Detail Tab -->
+            <div class="tab-content" id="property-detail">
+                <div class="property-detail">
+                    <div class="property-gallery">
+                        <div class="main-image">
+                            <img id="mainImage" src="https://picsum.photos/seed/investment1/800/600.jpg" alt="Property">
+                            <button class="image-nav prev" onclick="changeImage(-1)">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="image-nav next" onclick="changeImage(1)">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="thumbnail-gallery">
+                            <div class="thumbnail active" onclick="selectImage(0)">
+                                <img src="https://picsum.photos/seed/investment1/200/200.jpg" alt="Property">
+                            </div>
+                            <div class="thumbnail" onclick="selectImage(1)">
+                                <img src="https://picsum.photos/seed/investment2/200/200.jpg" alt="Property">
+                            </div>
+                            <div class="thumbnail" onclick="selectImage(2)">
+                                <img src="https://picsum.photos/seed/investment3/200/200.jpg" alt="Property">
+                            </div>
+                            <div class="thumbnail" onclick="selectImage(3)">
+                                <img src="https://picsum.photos/seed/investment4/200/200.jpg" alt="Property">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="property-info-detail">
+                            <h1 class="property-title">Luxury Residences DHA</h1>
+                            <div class="property-price">Starting from PKR 15,000,000</div>
+                            <div class="property-location-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                DHA, Lahore, Pakistan
+                            </div>
+
+                            <div class="property-features">
+                                <div class="feature-item">
+                                    <div class="feature-details">
+                                        <div class="feature-label">Property Type</div>
+                                        <div class="feature-value">Apartments</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-details">
+                                        <div class="feature-label">Area Range</div>
+                                        <div class="feature-value">1,200 - 3,500 sq. ft.</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-details">
+                                        <div class="feature-label">Bedrooms</div>
+                                        <div class="feature-value">2 - 4</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-details">
+                                        <div class="feature-label">Completion</div>
+                                        <div class="feature-value">Q4 2023</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="property-description">
+                                <h3>Project Description</h3>
+                                <p>Luxury Residences DHA is a premium residential project offering high-end apartments in one of Lahore's most prestigious locations. This project features modern architecture, state-of-the-art amenities, and breathtaking views of the city skyline. With a focus on luxury and comfort, these residences are designed for discerning investors seeking high returns and quality living spaces.</p>
+                            </div>
+
+                            <div class="investment-details">
+                                <h3>Investment Details</h3>
+                                <div class="investment-metrics">
+                                    <div class="metric-item">
+                                        <div class="metric-label">Expected ROI</div>
+                                        <div class="metric-value">18%</div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="metric-label">Investment Period</div>
+                                        <div class="metric-value">3-5 Years</div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="metric-label">Payment Plan</div>
+                                        <div class="metric-value">4 Years</div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="metric-label">Monthly Installment</div>
+                                        <div class="metric-value">PKR 250,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-form">
+                            <h3>Request Investment Proposal</h3>
+                            <form id="contactForm">
+                                <div class="form-group">
+                                    <label for="name">Your Name</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="investment">Investment Amount (PKR)</label>
+                                    <input type="number" class="form-control" id="investment" placeholder="e.g., 5000000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea class="form-control" id="message" placeholder="I'm interested in this investment opportunity..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Send Request
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Get Quote Tab -->
+            <div class="tab-content" id="get-quote">
+                <div class="contact-form">
+                    <h3>Request Investment Quote</h3>
+                    <p>Fill in the details below to receive a personalized investment proposal</p>
+                    
+                    <form id="quoteForm">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" class="form-control" id="fullName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emailAddress">Email Address *</label>
+                            <input type="email" class="form-control" id="emailAddress" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number *</label>
+                            <input type="tel" class="form-control" id="phoneNumber" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="investmentRange">Investment Range *</label>
+                            <select class="form-control" id="investmentRange" required>
+                                <option value="">Select Investment Range</option>
+                                <option value="1-5 million">PKR 1-5 Million</option>
+                                <option value="5-10 million">PKR 5-10 Million</option>
+                                <option value="10-20 million">PKR 10-20 Million</option>
+                                <option value="20-50 million">PKR 20-50 Million</option>
+                                <option value="50+ million">PKR 50+ Million</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="investmentType">Investment Type *</label>
+                            <select class="form-control" id="investmentType" required>
+                                <option value="">Select Investment Type</option>
+                                <option value="residential">Residential</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="mixed">Mixed Use</option>
+                                <option value="land">Land</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="timeline">Investment Timeline *</label>
+                            <select class="form-control" id="timeline" required>
+                                <option value="">Select Timeline</option>
+                                <option value="immediate">Immediate (0-3 months)</option>
+                                <option value="short-term">Short Term (3-6 months)</option>
+                                <option value="medium-term">Medium Term (6-12 months)</option>
+                                <option value="long-term">Long Term (1+ year)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectInterest">Project of Interest</label>
+                            <select class="form-control" id="projectInterest">
+                                <option value="">Select Project (Optional)</option>
+                                <option value="project1">Luxury Residences DHA</option>
+                                <option value="project2">Commercial Plaza Bahria</option>
+                                <option value="project3">Beachfront Villas</option>
+                                <option value="project4">Green Valley Housing</option>
+                                <option value="project5">Tech Hub Complex</option>
+                                <option value="project6">Riverside Apartments</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalInfo">Additional Information</label>
+                            <textarea class="form-control" id="additionalInfo" rows="4" placeholder="Any specific requirements or questions..."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn-auth btn-auth-primary">
+                                <i class="fas fa-file-invoice-dollar"></i> Get Quote
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Login/Register Tab -->
+            <div class="tab-content" id="login">
+                <div class="auth-container">
+                    <div class="auth-form">
+                        <div class="auth-header">
+                            <h2>Investor Portal</h2>
+                            <p>Access your investment dashboard and track your portfolio</p>
+                        </div>
+                        
+                        <div class="auth-tabs">
+                            <div class="auth-tab active" data-auth="login">Login</div>
+                            <div class="auth-tab" data-auth="register">Register</div>
+                        </div>
+                        
+                        <!-- Login Form -->
+                        <div class="auth-content active" id="loginForm">
+                            <form id="loginFormElement">
+                                <div class="form-group">
+                                    <label for="loginEmail">Email Address</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="loginPassword">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" id="rememberMe" style="margin-right: 10px;">
+                                        <label for="rememberMe" style="margin-bottom: 0;">Remember me</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-auth btn-auth-primary">
+                                        <i class="fas fa-sign-in-alt"></i> Login
+                                    </button>
+                                </div>
+                                
+                                <div class="forgot-password">
+                                    <a href="#">Forgot Password?</a>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Register Form -->
+                        <div class="auth-content" id="registerForm">
+                            <form id="registerFormElement">
+                                <div class="form-group">
+                                    <label for="registerName">Full Name</label>
+                                    <input type="text" class="form-control" id="registerName" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="registerEmail">Email Address</label>
+                                    <input type="email" class="form-control" id="registerEmail" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="registerPhone">Phone Number</label>
+                                    <input type="tel" class="form-control" id="registerPhone" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="registerPassword">Password</label>
+                                    <input type="password" class="form-control" id="registerPassword" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" id="agreeTerms" style="margin-right: 10px;" required>
+                                        <label for="agreeTerms" style="margin-bottom: 0;">I agree to the Terms & Conditions</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-auth btn-auth-primary">
+                                        <i class="fas fa-user-plus"></i> Register
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div class="tab-content" id="dashboard">
+                <div class="dashboard-content">
+                    <div class="welcome-card">
+                        <h2>Welcome back, <span id="investorName">Investor</span>!</h2>
+                        <p>Here's an overview of your investment portfolio</p>
+                        
+                        <div class="welcome-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Active Investments</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">18.5%</div>
+                                <div class="stat-label">Average ROI</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">$125K</div>
+                                <div class="stat-label">Total Invested</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-buttons">
+                            <a href="#" class="action-btn" data-tab="projects">
+                                <i class="fas fa-search"></i>
+                                Explore Projects
+                            </a>
+                            <a href="#" class="action-btn" data-tab="get-quote">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                Get Quote
+                            </a>
+                            <a href="#" class="action-btn">
+                                <i class="fas fa-download"></i>
+                                Download Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="investment-portfolio">
+                    <h3>Investment Portfolio</h3>
+                    <div class="portfolio-chart">
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                            <p>Investment Growth Chart</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-summary">
+                        <div class="summary-item">
+                            <div class="summary-value">$125,000</div>
+                            <div class="summary-label">Total Investment</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">18.5%</div>
+                            <div class="summary-label">Average ROI</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">5</div>
+                            <div class="summary-label">Active Projects</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">$23,125</div>
+                            <div class="summary-label">Total Returns</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="investment-opportunities">
+                    <h3>My Investments</h3>
+                    <div class="view-all-btn" data-tab="projects">View All Projects</div>
+                    
+                    <div class="projects-grid">
+                        <div class="project-card" data-project-id="1">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project1/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Luxury Residences DHA</h4>
+                                <p>High-end residential apartments in prime location</p>
+                                <div class="roi">ROI: 18%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    DHA, Lahore
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q4 2023</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>High Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="1">View Details</a>
+                                    <a href="#" class="action-btn">Track Investment</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project-id="3">
+                            <div class="project-image">
+                                <img src="https://picsum.photos/seed/project3/400/200.jpg" alt="Project">
+                                <div class="project-status status-ongoing">Ongoing</div>
+                            </div>
+                            <div class="project-info">
+                                <h4>Beachfront Villas</h4>
+                                <p>Luxury beachfront villas with private beach access</p>
+                                <div class="roi">ROI: 25%</div>
+                                <div class="location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Sea View, Karachi
+                                </div>
+                                <div class="project-stats">
+                                    <div class="project-stat">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Completion: Q2 2024</span>
+                                    </div>
+                                    <div class="project-stat">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Exceptional Growth</span>
+                                    </div>
+                                </div>
+                                <div class="project-actions">
+                                    <a href="#" class="action-btn" data-tab="property-detail" data-project-id="3">View Details</a>
+                                    <a href="#" class="action-btn">Track Investment</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage">Action completed successfully!</span>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Premium Estate</h3>
+                    <p>We are a leading real estate investment platform connecting investors with profitable opportunities. Invest with confidence and watch your wealth grow.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Investment Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-tab="projects">Investment Opportunities</a></li>
+                        <li><a href="#" data-tab="get-quote">Get Investment Quote</a></li>
+                        <li><a href="investment-guide.html">Investment Guide</a></li>
+                        <li><a href="roi-calculator.html">ROI Calculator</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>123 Investment Street, City, Country</p>
+                    <p>Phone: +123 456 7890</p>
+                    <p>Email: investors@premiumestate.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Premium Estate. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            
+            if (isLoggedIn === 'true' && currentUser.email) {
+                // User is logged in, show dashboard
+                document.getElementById('investorName').textContent = currentUser.name || 'Investor';
+                
+                // Set user avatar initials
+                const initials = (currentUser.name || 'Investor').split(' ').map(n => n[0]).join('').toUpperCase();
+                document.getElementById('userAvatar').textContent = initials;
+            } else {
+                // User is not logged in, show login tab
+                showTab('login');
+            }
+        });
+
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('mainMenu').classList.toggle('active');
+        });
+
+        // User dropdown toggle
+        document.getElementById('userAvatar').addEventListener('click', function() {
+            document.getElementById('userDropdown').classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                document.getElementById('userDropdown').classList.remove('active');
+            }
+        });
+
+        // Tab navigation
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab nav items
+            document.querySelectorAll('.tab-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Remove active class from all menu links
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to selected tab nav item
+            document.querySelector(`.tab-nav-item[data-tab="${tabId}"]`).classList.add('active');
+            
+            // Add active class to selected menu link
+            document.querySelector(`.menu-link[data-tab="${tabId}"]`).classList.add('active');
+            
+            // Update hero section based on tab
+            updateHeroSection(tabId);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Update hero section based on active tab
+        function updateHeroSection(tabId) {
+            const heroTitle = document.getElementById('heroTitle');
+            const heroDescription = document.getElementById('heroDescription');
+            
+            switch(tabId) {
+                case 'home':
+                    heroTitle.textContent = 'Investment Opportunities';
+                    heroDescription.textContent = 'Discover profitable real estate investment opportunities with high ROI potential';
+                    break;
+                case 'projects':
+                    heroTitle.textContent = 'Investment Projects';
+                    heroDescription.textContent = 'Explore our portfolio of ongoing and upcoming real estate projects';
+                    break;
+                case 'property-detail':
+                    heroTitle.textContent = 'Investment Details';
+                    heroDescription.textContent = 'View detailed information about this investment opportunity';
+                    break;
+                case 'get-quote':
+                    heroTitle.textContent = 'Get Investment Quote';
+                    heroDescription.textContent = 'Request a personalized investment proposal tailored to your needs';
+                    break;
+                case 'login':
+                    heroTitle.textContent = 'Investor Portal';
+                    heroDescription.textContent = 'Access your investment dashboard and track your portfolio';
+                    break;
+                case 'dashboard':
+                    heroTitle.textContent = 'Investment Dashboard';
+                    heroDescription.textContent = 'Track your investments and monitor your portfolio performance';
+                    break;
+            }
+        }
+
+        // Tab navigation event listeners
+        document.querySelectorAll('.tab-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
+
+        // Menu navigation event listeners
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
+
+        // Action buttons with tab navigation
+        document.querySelectorAll('.action-btn[data-tab]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                
+                // If property detail tab, also set project ID
+                if (tabId === 'property-detail') {
+                    const projectId = this.getAttribute('data-project-id');
+                    if (projectId) {
+                        updatePropertyDetail(projectId);
+                    }
+                }
+                
+                showTab(tabId);
+            });
+        });
+
+        // View all buttons with tab navigation
+        document.querySelectorAll('.view-all-btn[data-tab]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
+
+        // Footer links with tab navigation
+        document.querySelectorAll('.footer-links a[data-tab]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
+
+        // User dropdown links with tab navigation
+        document.querySelectorAll('.user-dropdown a[data-tab]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
+
+        // Auth tabs
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const authType = this.getAttribute('data-auth');
+                
+                // Remove active class from all auth tabs
+                document.querySelectorAll('.auth-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Remove active class from all auth content
+                document.querySelectorAll('.auth-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show corresponding form
+                document.getElementById(authType + 'Form').classList.add('active');
+            });
+        });
+
+        // Update property detail based on project ID
+        function updatePropertyDetail(projectId) {
+            // In a real application, this would fetch data from a server
+            // For this demo, we'll just update the title based on the project ID
+            const projectTitles = {
+                '1': 'Luxury Residences DHA',
+                '2': 'Commercial Plaza Bahria',
+                '3': 'Beachfront Villas',
+                '4': 'Green Valley Housing',
+                '5': 'Tech Hub Complex',
+                '6': 'Riverside Apartments'
+            };
+            
+            const projectPrices = {
+                '1': 'Starting from PKR 15,000,000',
+                '2': 'Starting from PKR 8,000,000',
+                '3': 'Starting from PKR 25,000,000',
+                '4': 'Starting from PKR 5,000,000',
+                '5': 'Starting from PKR 12,000,000',
+                '6': 'Starting from PKR 10,000,000'
+            };
+            
+            const projectROI = {
+                '1': '18%',
+                '2': '22%',
+                '3': '25%',
+                '4': '15%',
+                '5': '20%',
+                '6': '16%'
+            };
+            
+            if (projectTitles[projectId]) {
+                document.querySelector('.property-title').textContent = projectTitles[projectId];
+                document.querySelector('.property-price').textContent = projectPrices[projectId];
+                document.querySelector('.metric-value').textContent = projectROI[projectId];
+            }
+        }
+
+        // Image gallery
+        const images = [
+            'https://picsum.photos/seed/investment1/800/600.jpg',
+            'https://picsum.photos/seed/investment2/800/600.jpg',
+            'https://picsum.photos/seed/investment3/800/600.jpg',
+            'https://picsum.photos/seed/investment4/800/600.jpg'
+        ];
+
+        let currentImage = 0;
+
+        function selectImage(index) {
+            currentImage = index;
+            document.getElementById('mainImage').src = images[index];
+            
+            // Update thumbnail active state
+            document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function changeImage(direction) {
+            currentImage = (currentImage + direction + images.length) % images.length;
+            selectImage(currentImage);
+        }
+
+        // Login form submission
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // In a real application, this would authenticate with a server
+            // For this demo, we'll just save to localStorage
+            const currentUser = {
+                email: email,
+                name: 'Investor User',
+                type: 'investor'
+            };
+            
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Show success notification
+            showNotification('Login successful! Redirecting to dashboard...', 'success');
+            
+            // Redirect to dashboard after 1 second
+            setTimeout(() => {
+                showTab('dashboard');
+                document.getElementById('investorName').textContent = currentUser.name;
+                
+                // Set user avatar initials
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                document.getElementById('userAvatar').textContent = initials;
+            }, 1000);
+        });
+
+        // Register form submission
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match!', 'error');
+                return;
+            }
+            
+            // In a real application, this would register with a server
+            // For this demo, we'll just save to localStorage
+            const currentUser = {
+                email: email,
+                name: name,
+                type: 'investor'
+            };
+            
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Show success notification
+            showNotification('Registration successful! Redirecting to dashboard...', 'success');
+            
+            // Redirect to dashboard after 1 second
+            setTimeout(() => {
+                showTab('dashboard');
+                document.getElementById('investorName').textContent = currentUser.name;
+                
+                // Set user avatar initials
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                document.getElementById('userAvatar').textContent = initials;
+            }, 1000);
+        });
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                investment: document.getElementById('investment').value,
+                message: document.getElementById('message').value,
+                property: document.querySelector('.property-title').textContent,
+                date: new Date().toISOString()
+            };
+            
+            // Save inquiry to localStorage
+            let inquiries = JSON.parse(localStorage.getItem('investmentInquiries') || '[]');
+            inquiries.push(formData);
+            localStorage.setItem('investmentInquiries', JSON.stringify(inquiries));
+            
+            // Show success notification
+            showNotification('Your investment request has been submitted! We will contact you soon.', 'success');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Quote form submission
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('emailAddress').value,
+                phone: document.getElementById('phoneNumber').value,
+                investmentRange: document.getElementById('investmentRange').value,
+                investmentType: document.getElementById('investmentType').value,
+                timeline: document.getElementById('timeline').value,
+                projectInterest: document.getElementById('projectInterest').value,
+                additionalInfo: document.getElementById('additionalInfo').value,
+                date: new Date().toISOString()
+            };
+            
+            // Save quote request to localStorage
+            let quotes = JSON.parse(localStorage.getItem('investmentQuotes') || '[]');
+            quotes.push(formData);
+            localStorage.setItem('investmentQuotes', JSON.stringify(quotes));
+            
+            // Show success notification
+            showNotification('Your quote request has been submitted! We will send you a personalized investment proposal soon.', 'success');
+            
+            // Reset form
+            this.reset();
+        });
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const icon = notification.querySelector('i');
+            
+            // Set message
+            notificationMessage.textContent = message;
+            
+            // Set type
+            notification.className = 'notification';
+            if (type === 'success') {
+                notification.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                notification.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+            }
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Filter tabs functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs in this group
+                this.parentElement.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // In a real application, this would filter the displayed items
+                // For this demo, we'll just show a notification
+                const filterType = this.textContent;
+                showNotification(`Filtering by: ${filterType}`, 'success');
+            });
+        });
+
+        // Auto-rotate images in property detail
+        setInterval(() => {
+            if (document.getElementById('property-detail').classList.contains('active')) {
+                changeImage(1);
+            }
+        }, 5000);
+
+        // Add animation to elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.project-card, .summary-item').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
